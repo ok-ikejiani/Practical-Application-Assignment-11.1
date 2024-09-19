@@ -2,14 +2,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def analyze_missing(df):
-    # Check for any rows missing important data and print the percentage of missing values
+def analyze_missing_values(df):
     missing_values = df.isnull().sum()
     missing_percentage = (df.isnull().sum() / len(df)) * 100
-
-    # Print the total number and percentage of missing values for each column
-    # print("Missing Values:\n", missing_values)
-    print("\nPercentage of Missing Values:\n", missing_percentage)
+    
+    print("\nMissing Values Analysis:")
+    print("{:<20} {:>10} {:>10}".format("Feature", "#Missing", "%Missing"))
+    print("-" * 45)
+    for feature, count in missing_values.items():
+        percentage = missing_percentage[feature]
+        print("{:<20} {:>10} {:>10.2f}%".format(feature, count, percentage))
     
 def correlation_analysis(df, target_column, corr_threshold=0.8):
     # Step 1: Calculate correlation matrix
@@ -122,3 +124,22 @@ def print_unique_values(df):
     for column in df.columns:
         unique_count = df[column].nunique()
         print(f"Column '{column}' has {unique_count} unique values.")
+
+def drop_outliers(df, column, min_value, max_value):
+    """
+    This function takes a dataframe and drops rows where the values in the specified column
+    are below the minimum or above the maximum specified values.
+    
+    Parameters:
+    df (pd.DataFrame): Input dataframe to be processed
+    column (str): The column name for which outliers need to be removed
+    min_value (float): The minimum acceptable value for the specified column
+    max_value (float): The maximum acceptable value for the specified column
+    
+    Returns:
+    pd.DataFrame: Dataframe with outliers removed
+    """
+    df_filtered = df[(df[column] >= min_value) & (df[column] <= max_value)]
+    return df_filtered
+
+
