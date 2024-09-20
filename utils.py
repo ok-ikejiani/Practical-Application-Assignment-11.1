@@ -68,49 +68,6 @@ def correlation_analysis(df, target_column, corr_threshold=0.8):
     
     return target_corr, highly_corr_columns
 
-# Function to drop all columns from a specified list of columns
-def drop_columns(data, columns):
-    # Drop rows where any of the specified columns have null values
-    data = data.drop(columns, axis=1)
-    return data
-
-# Function to drop null values from a specified list of columns
-def drop_nulls_from_columns(data, columns):
-    # Drop rows where any of the specified columns have null values
-    data = data.dropna(subset=columns)
-    return data
-def clean_and_encode(df):
-    """
-    This function takes a dataframe, replaces missing/null values with 'unknown',
-    and applies one-hot encoding on the non-numeric columns.
-    
-    Parameters:
-    df (pd.DataFrame): Input dataframe to be processed
-    
-    Returns:
-    pd.DataFrame: Cleaned and one-hot encoded dataframe
-    """
-    # # Replace missing/null values with 'unknown' for non-numeric columns
-    # df_cleaned = df.fillna('unknown')
-    
-    # # Select non-numeric columns
-    # non_numeric_cols = df_cleaned.select_dtypes(include=['object']).columns
-    # print(non_numeric_cols)
-    
-    # # Apply one-hot encoding to non-numeric columns
-    # df_encoded = pd.get_dummies(df_cleaned, columns=non_numeric_cols, drop_first=True)
-    
-    # Separate numeric and non-numeric columns
-    non_numeric_cols = df.select_dtypes(include=['object']).columns
-    
-    # Fill missing values for non-numeric columns with 'unknown'
-    df[non_numeric_cols] = df[non_numeric_cols].fillna('unknown')
-    
-    # Apply one-hot encoding to non-numeric columns only
-    df_encoded = pd.get_dummies(df, columns=non_numeric_cols, drop_first=True)
-
-    return df_encoded
-
 def print_unique_values(df):
     """
     This function takes a DataFrame as input and prints the number of unique values in each column.
@@ -143,3 +100,6 @@ def drop_outliers(df, column, min_value, max_value):
     return df_filtered
 
 
+def uniques(df, columns):
+    unique_values = [df[column].unique().tolist() for column in columns]
+    return unique_values
